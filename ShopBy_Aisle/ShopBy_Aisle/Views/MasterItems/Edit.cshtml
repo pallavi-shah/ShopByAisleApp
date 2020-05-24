@@ -1,0 +1,70 @@
+﻿@model ShopBy_Aisle.Models.MasterItem
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>MasterItem</h4>
+<hr />
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script type="text/javascript">
+        $(document).ready(function () {
+           $("#storeID").change(function () {
+                selectedValues = { storeID: $("#storeID").val(), catID: $("#catID").val() };
+                 $.ajax({
+                 url: '/MasterItems/GetAisleData',
+                type: 'POST',
+                dataType: 'json',
+                    @*data: JSON.stringify(selectedValues),*@
+                data:{JsonStr: JSON.stringify(selectedValues)},
+                success: function (data) {
+                        if (data.success) {
+                            document.getElementById("aisleID").value = data.aisleID;
+                            document.getElementById("aisleName").value = data.aisleName;
+                        }
+                    }
+                })
+            });
+        });
+</script>
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="ID" />
+            <div class="form-group">
+                <label asp-for="ItemName" class="control-label"></label>
+                <input asp-for="ItemName" class="form-control" />
+                <span asp-validation-for="ItemName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CategoryID" class="control-label"></label>
+                <select asp-for="CategoryID" class="form-control" asp-items="ViewBag.CategoryID" id="catID"></select>
+                <span asp-validation-for="CategoryID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="StoreID" class="control-label"></label>
+                <select asp-for="StoreID" class="form-control" asp-items="ViewBag.StoreID" id="storeID"></select>
+                <span asp-validation-for="StoreID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Aisle.Name" class="control-label"></label>
+                <input asp-for="Aisle.Name" class="form-control" id="aisleName" />
+                <span asp-validation-for="Aisle.Name" id="aisleName" class="text-danger"></span>
+            </div>
+            <input asp-for="AisleID" id="aisleID" class="form-control" hidden />
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

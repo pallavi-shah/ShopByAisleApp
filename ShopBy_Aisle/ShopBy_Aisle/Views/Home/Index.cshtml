@@ -1,0 +1,27 @@
+﻿@{
+    ViewData["Title"] = "My Home Page";
+}
+
+
+<style>
+    .Home_Images {
+        width: 50px;
+        height: 50px
+    }
+
+    body {
+        background-image: url('/Images/IMAGE1.jpg');
+        background-repeat: no-repeat;
+        background-size: contain;
+        background-position: center;
+        background-color: steelblue;
+    }
+</style>
+
+<body>
+    <div class="text-center">
+        <p class="display-4" style="color: lemonchiffon ;font-weight: bold; font-family:  Cambria, Cochin, Georgia, Times, Times New Roman, serif">ShopByAisle</p>
+        <br />
+        @*<a asp-controller="MasterItems" asp-action="Index"><img class="Home_Images" src="~/Images/IMAGE1.jpg" /></a>*@
+    </div>
+</body>

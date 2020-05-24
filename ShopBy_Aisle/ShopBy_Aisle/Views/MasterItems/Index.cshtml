@@ -1,0 +1,60 @@
+﻿@model IEnumerable<ShopBy_Aisle.Models.MasterItem>
+
+@{
+    ViewData["Title"] = "MasterItems";
+}
+
+<h1>My Master Data List</h1>
+
+<p>
+    <a asp-action="Create">Add Item</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ItemName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Category)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PreferredStore)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Aisle)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AddToShoppingList)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ItemName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Category.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PreferredStore.Alias)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Aisle.Name)
+                </td>
+                <td>
+                    <input type="checkbox" checked=@item.AddToShoppingList />
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
+                    @*<a asp-action="Details" asp-route-id="@item.ID">Details</a> |*@
+                    <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
