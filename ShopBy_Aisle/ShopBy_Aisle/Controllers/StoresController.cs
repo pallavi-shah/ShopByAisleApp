@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ShopBy_Aisle.Data;
 using ShopBy_Aisle.Models;
+using Newtonsoft.Json.Linq;
 
 namespace ShopByAisle.Controllers
 {
@@ -159,6 +160,36 @@ namespace ShopByAisle.Controllers
         private bool StoreExists(int id)
         {
             return _context.Stores.Any(e => e.ID == id);
+        }
+
+        public JsonResult AddStore(string JsonStr)
+        {
+            JObject jsondata = JObject.Parse(JsonStr);
+            try
+            {
+                Store myStore = _context.Stores.Single(s => s.Address == jsondata["address"].ToString());
+                return Json(new { success = true, message = "Store already exists in your favorites." });
+
+            }
+            catch (Exception)
+            {
+                try
+                {
+                    Store myStore = new Store();
+                    myStore.Name = jsondata["name"].ToString(); ;
+                    myStore.Address = jsondata["address"].ToString();
+                    myStore.Alias = jsondata["alias"].ToString();
+                    _context.Stores.Add(myStore);
+                    _context.SaveChanges();
+                    return Json(new { success = true, message = "Store Added to your favorites." });
+
+                }
+                catch (Exception)
+                {
+                    return Json(new { success = true, message = "Error, Please Try again." });
+                }
+            }
+
         }
     }
 }

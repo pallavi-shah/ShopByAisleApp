@@ -188,3 +188,5 @@ C:\Users\conta\Desktop\codergirl\ShopByAisleApp\ShopBy_Aisle\ShopBy_Aisle\obj\De
 C:\Users\conta\Desktop\codergirl\ShopByAisleApp\ShopBy_Aisle\ShopBy_Aisle\obj\Debug\netcoreapp3.1\Razor\Views\Stores\Edit.cshtml.g.cs
 C:\Users\conta\Desktop\codergirl\ShopByAisleApp\ShopBy_Aisle\ShopBy_Aisle\obj\Debug\netcoreapp3.1\Razor\Views\Stores\Index.cshtml.g.cs
 C:\Users\conta\Desktop\codergirl\ShopByAisleApp\ShopBy_Aisle\ShopBy_Aisle\obj\Debug\netcoreapp3.1\Razor\Views\Stores\Maps.cshtml.g.cs
+C:\Users\conta\Desktop\codergirl\ShopByAisleApp\ShopBy_Aisle\ShopBy_Aisle\obj\Debug\netcoreapp3.1\Razor\Views\MasterItems\CreatePartial.cshtml.g.cs
+C:\Users\conta\Desktop\codergirl\ShopByAisleApp\ShopBy_Aisle\ShopBy_Aisle\obj\Debug\netcoreapp3.1\Razor\Views\Stores\CreatePartial.cshtml.g.cs

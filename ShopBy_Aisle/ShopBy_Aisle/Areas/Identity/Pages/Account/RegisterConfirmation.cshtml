@@ -4,13 +4,14 @@
     ViewData["Title"] = "Register confirmation";
 }
 
-<h1>@ViewData["Title"]</h1>
+@*<h1>@ViewData["Title"]</h1>*@
 @{
     if (@Model.DisplayConfirmAccountLink)
     {
-        <p>
-            Congratulations,You're Registered !!
-        </p>
+    <p>
+        Thank you for Registering !
+        <a id="confirm-link" href="@Model.EmailConfirmationUrl">Click here to confirm your account</a>
+    </p>
     }
     else
     {

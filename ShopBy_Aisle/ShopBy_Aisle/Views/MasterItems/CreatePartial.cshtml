@@ -1,0 +1,90 @@
+﻿@model ShopBy_Aisle.Models.MasterItem
+
+@{
+    ViewData["Title"] = "AddMasterItem";
+}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#storeID").change(function () {
+            selectedValues = { storeID: $("#storeID").val(), catID: $("#catID").val() };
+            $.ajax({
+                url: '/MasterItems/GetAisleData',
+                type: 'POST',
+                dataType: 'json',
+                data: { JsonStr: JSON.stringify(selectedValues) },
+                success: function (data) {
+                    if (data.success) {
+                        document.getElementById("aisleID").value = data.aisleID;
+                        document.getElementById("aisleName").value = data.aisleName;
+                    }
+                }
+            })
+        });
+    });
+
+
+
+</script>
+
+
+@*<h4>Add MasterItem</h4>*@
+<hr />
+<form asp-action="Create">
+    <div class="row">
+        <div class="col-md-12">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <input asp-for="ItemName" class="form-control" placeholder="Enter Item Name" />
+                <span asp-validation-for="ItemName" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <select asp-for="CategoryID" class="form-control" asp-items="ViewBag.CategoryID" id="catID">
+                    <option value="0">Select Category</option>
+                </select>
+                <span asp-validation-for="CategoryID" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <select asp-for="StoreID" class="form-control" asp-items="ViewBag.StoreID" id="storeID">
+                    <option value="0">Select Store</option>
+                </select>
+                <span asp-validation-for="StoreID" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="form-control">Store Aisle</label>
+            </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <input asp-for="Aisle.Name" id="aisleName" class="form-control" />
+                    </div>
+                </div>
+        </div>
+                <input asp-for="AisleID" id="aisleID" class="form-control" hidden />
+
+                <div class="form-group">
+                    <input type="submit" value="Save" class="btn btn-primary" />&emsp;&emsp;&emsp;&emsp;
+                    <label asp-for="AddToShoppingList" class="control-label"></label>
+                    <input type="checkbox" asp-for="AddToShoppingList" />
+                </div>
+</form>
+    
+
+@*<div>
+    <a asp-action="Index">Back to List</a>
+</div>*@
+

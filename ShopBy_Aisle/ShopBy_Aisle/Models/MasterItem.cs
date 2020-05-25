@@ -27,8 +27,8 @@ namespace ShopBy_Aisle.Models
 
         [DataType(DataType.Date)]
         public DateTime DateShopped { get; set; }
-
         public int AisleID { get; set; }
+                
         public Aisle Aisle { get; set; }
         public bool AddToShoppingList { get; set; }
     }

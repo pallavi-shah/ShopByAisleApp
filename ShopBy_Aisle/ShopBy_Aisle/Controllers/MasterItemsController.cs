@@ -22,12 +22,37 @@ namespace ShopByAisle.Controllers
         }
 
         // GET: MasterItems
+        
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.MasterItems.Include(m => m.Category).Include(m => m.PreferredStore).Include(m => m.Aisle);
+                var applicationDbContext = _context.MasterItems.Include(m => m.Category).Include(m => m.PreferredStore).Include(m => m.Aisle);
+            ViewData["CategoryID"] = new SelectList(_context.Categories, "ID", "Name");
+            ViewData["StoreID"] = new SelectList(_context.Stores, "ID", "Alias");
+            ViewData["Item"] = new MasterItem();
             return View(await applicationDbContext.ToListAsync());
+           
         }
 
+        
+        public async Task<IActionResult> FindItem(string searchTerm)
+        {
+
+
+            if (searchTerm == null)
+            {
+                var applicationDbContext = _context.MasterItems.Include(m => m.Category).Include(m => m.PreferredStore).Include(m => m.Aisle);
+                return View(await applicationDbContext.ToListAsync());
+            }
+
+            else
+            {
+                var result = _context.MasterItems.Where(i => i.ItemName.Contains(searchTerm));
+                var applicationDbContext = result.Include(m => m.Category).Include(m => m.PreferredStore).Include(m => m.Aisle);
+                return View("Index", await applicationDbContext.ToListAsync());
+            }
+
+
+        }
         // GET: MasterItems/Details/5
         /*public async Task<IActionResult> Details(int? id)
         {
@@ -242,6 +267,7 @@ namespace ShopByAisle.Controllers
                 return Json(new { success = true, aisleName = "", aisleID = 0 });
             }
         }
+       
     }
 
 }

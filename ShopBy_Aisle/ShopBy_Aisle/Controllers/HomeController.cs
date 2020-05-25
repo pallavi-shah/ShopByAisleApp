@@ -33,7 +33,7 @@ namespace ShopBy_Aisle.Controllers
             }
             else
             {
-                return View();
+                return Redirect("/Identity/Account/Login");
             }
         }
 

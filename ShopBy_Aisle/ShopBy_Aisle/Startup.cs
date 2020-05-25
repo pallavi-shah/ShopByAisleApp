@@ -62,7 +62,7 @@ namespace ShopBy_Aisle
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=MasterItems}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
             });
         }
