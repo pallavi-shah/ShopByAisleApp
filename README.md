@@ -6,7 +6,7 @@ It is about creating a shopping list by the user, which not only helps to prepar
 
 I came up with this idea in today’s situation of Covid-19. Due to my health restrictions, my husband who is a rare shopper started to shop frequently. Seeing the amount of time he spent searching the items in stores and shopping, I really wished there was an app where he had my shopping list along with the aisles mentioned next to it to make his shopping experience hassle free and faster to navigate in stores. That’s when I got this idea to create an application to make things easy for both of us.
 
-##### Technologies used:
+#### Technologies used:
 
 * Front End : Javascript, Html, css,BOOTSTRAP, jquery, Ajax, Google Map API
 * Back End : C#, ASP.NET MVC
