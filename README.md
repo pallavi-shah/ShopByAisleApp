@@ -8,10 +8,10 @@ I came up with this idea in today’s situation of Covid-19. Due to my health re
 
 ## Technologies used for the project :
 
-# Front End : Javascript, Html, css,BOOTSTRAP, jquery, Ajax, Google Map API
-# Back End : C#, ASP.NET MVC
-# Database : Sql Server
-# Tools : Visual Studio
+* Front End : Javascript, Html, css,BOOTSTRAP, jquery, Ajax, Google Map API
+* Back End : C#, ASP.NET MVC
+* Database : Sql Server
+* Tools : Visual Studio
 
 ## License & Copyright
 
