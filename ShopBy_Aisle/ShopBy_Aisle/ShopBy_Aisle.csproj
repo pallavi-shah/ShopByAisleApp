@@ -5,6 +5,10 @@
     <UserSecretsId>aspnet-ShopBy_Aisle-DC918125-45CE-4779-AF65-13F86502B60F</UserSecretsId>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Content Remove="wwwroot\Images\texture.jpg" />
+  </ItemGroup>
+
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="3.1.1" />

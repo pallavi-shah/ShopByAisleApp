@@ -80,10 +80,7 @@ namespace ShopBy_Aisle.Areas.Identity.Pages.Account
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
                 var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
-                
                 if (result.Succeeded)
-                // 0524 chetan - made as 1=1 to bypass login validation, due to result.Succeeded always false issue
-         //       if (1==1)
                 {
                     _logger.LogInformation("User logged in.");
                     return LocalRedirect(returnUrl);
@@ -99,8 +96,7 @@ namespace ShopBy_Aisle.Areas.Identity.Pages.Account
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-                    ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();//by chetan
+                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");   
                     return Page();
                 }
             }

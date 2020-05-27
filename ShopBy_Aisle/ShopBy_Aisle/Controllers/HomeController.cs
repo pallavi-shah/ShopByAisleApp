@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using ShopBy_Aisle.Models;
 
@@ -29,7 +30,7 @@ namespace ShopBy_Aisle.Controllers
         {
             if (_signinManager.IsSignedIn(User))
             {
-                return View("LaunchPage");
+                return Redirect("/MasterItems/Index");
             }
             else
             {
