@@ -4,102 +4,112 @@
     ViewData["Title"] = "MasterItems";
 }
 
-<body>
-    <br />
-    <span class="btn btn-primary btn-sm btn-block">Frequently Shopped List</span>
-    <hr />
-
-    <div class="search-box">
-        <form method="get" action="/MasterItems/FindItem">
-            <input type="text" placeholder="Search an item" name="searchTerm" />
-            @*<a href="/MasterItems/FindItem">
-                    <img src="~/Images/Magnifyingglass1.png" />
-                </a>*@
-            <input type="submit" value="search" />
-        </form>
-    </div>
-    <br />
-    <br />
-    <p>
-        @* <a asp-action="Create">Add New Item</a>*@
-    </p>
-    <table class="table">
-        @*<thead>
-                <tr>
-                    <th>
-                        @Html.DisplayNameFor(model => model.ItemName)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Category)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.PreferredStore)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Aisle)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.AddToShoppingList)
-                    </th>
-                    <th></th>
-                </tr>
-            </thead>*@
-        @*<tbody>*@
-
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ItemName)<br />
-                    Category : @Html.DisplayFor(modelItem => item.Category.Name)<br />
-
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.PreferredStore.Alias)<br />
-                    Aisle: @Html.DisplayFor(modelItem => item.Aisle.Name)
-
-                </td>
-                @*<td>
-                        Category :@Html.DisplayFor(modelItem => item.Category.Name)<br />
-
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.PreferredStore.Alias)
-                    </td>
-                    <td>
-                        Aisle :@Html.DisplayFor(modelItem => item.Aisle.Name)
-                    </td>*@
-                <td>
-                    <input type="checkbox" checked=@item.AddToShoppingList />
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
-                    @*<a asp-action="Details" asp-route-id="@item.ID">Details</a> |*@
-                    <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
-                </td>
-            </tr>
-        }
-        @* </tbody>*@
-    </table>
-    <script>
-        function DisplayAdd() {
-            var var_newItemDiv = document.getElementById("newItemDiv");
-            if (var_newItemDiv.hidden == true) {
-                var_newItemDiv.hidden = false;
-            }
-            else
-                var_newItemDiv.hidden = true;
-
-        }
-    </script>
-
-    <input type="button" onclick="DisplayAdd()" class="btn btn-primary btn-lg btn-block" value="Add New Item" />
-
-    <br />
-    <br />
-    <section>
-        <div class="form-group" id="newItemDiv" hidden>
-            @await Html.PartialAsync("CreatePartial", @ViewData["Item"])
+    <body>
+        <br />
+        <br />
+        <div class="form-group">
+            <form method="get" action="/MasterItems/FindItem">
+                <input type="text" name="pg" value="@ViewBag.pg" hidden />
+                <input type="text" placeholder="Search an item" name="searchTerm" />
+                <input type="submit" value="search" class="btn btn-sm btn-dark" />
+                <input type="button" onclick="DisplayAdd()" class="btn btn-sm btn-primary" value="Add New Item" id="addNewItem_button" />
+            </form>
         </div>
-    </section>
-</body>
+        <p class="text-danger">@TempData["Error"]</p>
+        <section>
+            <div class="form-group" id="newItemDiv" hidden>
+                <br />
+                <span class="btn btn-success btn-sm btn-block">New Item </span>
+                @await Html.PartialAsync("CreatePartial", @ViewData["Item"])
+            </div>
+        </section>
+        <br />
+        @if (ViewBag.Results == true)
+        {
+            <div class="row">
+                <p class="col-6 text-danger">
+                    @TempData["Message"]
+                </p>
+                <p class="col-6 text-right">
+                    <a asp-controller="MasterItems" asp-action="Index">Back to List</a>
+                </p>
+            </div>
+        }
+
+        @if (ViewBag.pg == "ml")
+        {
+            <span class="btn btn-success btn-sm btn-block">Frequently Shopped Items List</span>
+        }
+        else
+        {
+            <span class="btn btn-success btn-sm btn-block">My Shopping List</span>
+        }
+
+        <table class="table">
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ItemName)<br />
+                        (@Html.DisplayFor(modelItem => item.Category.Name))<br />
+
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PreferredStore.Alias)<br />
+                        Aisle: @Html.DisplayFor(modelItem => item.Aisle.Name)
+
+                    </td>
+                    <td>
+                        <label asp-for="@item.Quantity">Qty: </label>
+                        @Html.DisplayFor(modelItem => item.Quantity)
+                    </td>
+
+                    <td @ViewBag.sl_hidden>
+                        <label asp-for="@item.AddToShoppingList">Add to Shopping List</label>&nbsp;
+                        <input type="checkbox" checked=@item.AddToShoppingList name="add_shop" onclick="update_sl(this)" value="@item.ID" />
+                    </td>
+                    <td @ViewBag.ml_hidden>
+                        <label asp-for="@item.MasterList">Add to Master List</label>&nbsp;
+                        <input type="checkbox" checked=@item.MasterList name="add_master" onclick="update_sl(this)" value="@item.ID"/>
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
+                        @*<a asp-action="Details" asp-route-id="@item.ID">Details</a> |*@
+                        <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                    </td>
+
+                </tr>
+            }
+        </table>
+        <script>
+            function DisplayAdd() {
+                var var_newItemDiv = document.getElementById("newItemDiv");
+                if (var_newItemDiv.hidden == true) {
+                    var_newItemDiv.hidden = false;
+                }
+                else
+                    var_newItemDiv.hidden = true;
+            }
+
+            function update_sl(selectedCheckbox) {
+                console.log(selectedCheckbox.checked);
+                console.log(selectedCheckbox.value);
+                selectedValues = { selected: selectedCheckbox.checked, itemID: selectedCheckbox.value, name: selectedCheckbox.name };
+                $.ajax({
+                    url: '/MasterItems/UpdateFlag',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: { JsonStr: JSON.stringify(selectedValues) },
+                    success: function (data) {
+                        if (data.success) {
+                            console.log("successful");
+                        }
+                    }
+                })
+            };
+
+        </script>
+        <br />
+        <br />
+    </body>

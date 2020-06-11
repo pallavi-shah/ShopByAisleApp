@@ -30,7 +30,7 @@ namespace ShopBy_Aisle.Controllers
         {
             if (_signinManager.IsSignedIn(User))
             {
-                return Redirect("/MasterItems/Index");
+                return Redirect("/MasterItems/Index?pg=sl");
             }
             else
             {

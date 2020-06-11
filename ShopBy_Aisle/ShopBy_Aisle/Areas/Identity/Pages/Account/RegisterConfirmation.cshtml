@@ -8,10 +8,13 @@
 @{
     if (@Model.DisplayConfirmAccountLink)
     {
-    <p>
+    <h3>
         Thank you for Registering !
-        <a id="confirm-link" href="@Model.EmailConfirmationUrl">Click here to confirm your account</a>
-    </p>
+    </h3>
+    <br />
+        <a class="btn btn-primary"   asp-area="Identity" asp-page="/Account/Login">Login</a>
+        @* <a id="confirm-link" href="@Model.EmailConfirmationUrl">Click here to confirm your account</a>*@
+    
     }
     else
     {

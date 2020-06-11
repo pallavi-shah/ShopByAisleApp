@@ -61,6 +61,9 @@
                         success: function (data) {
                             if (data.success) {
                                 infowindowSelected.setContent(data.message);
+                                elementstorebody = document.getElementById("storetable");
+                                elementstorebody.innerHTML += getNetStoreRow(data); 
+                                console.log(data.newstore);
                             } else {
                                 infowindowSelected.setContent("Sorry, Unable to save, please try again.....");
 
@@ -69,6 +72,22 @@
                     })
                 }
 
+            }
+            function getNetStoreRow(storedata) {
+                if (storedata.nsID != undefined) {
+                    str_tr = " <tr> <td>";
+                    str_tr += storedata.nsName;   // kohls
+                    str_tr += "</td> <td>";
+                    str_tr += storedata.nsAddress;  //  14425 Andersohn Dr, Manchester, MO 63011, USA
+                    str_tr += "</td> <td hidden>";
+                    str_tr += storedata.nsUserName; // test100@gmail.com
+                    str_tr += "</td> <td>";
+                    str_tr += "<a href='/Stores/Edit/" + storedata.nsID + "'>Edit</a> |";
+                    str_tr += "<a href='/Stores/Details/" + storedata.nsID + "'>Details</a> |";
+                    str_tr += "<a href='/Stores/Delete/" + storedata.nsID + "'>Delete</a> ";
+                    str_tr += "</td> </tr";
+                }
+                return str_tr;
             }
 
             function initMap() {
@@ -215,25 +234,28 @@
             <th></th>
         </tr>
     </thead>
-    <tbody>
+    <tbody id="storetable">
         @foreach (var item in Model)
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Name)
-                </td>
-                @*<td>
-                    @Html.DisplayFor(modelItem => item.Alias)
-                </td>*@
-                <td>
-                    @Html.DisplayFor(modelItem => item.Address)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
-                </td>
-            </tr>
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            @*<td>
+            @Html.DisplayFor(modelItem => item.Alias)
+        </td>*@
+            <td>
+                @Html.DisplayFor(modelItem => item.Address)
+            </td>
+            <td hidden>
+                @Html.DisplayFor(modelItem => item.UserName)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+            </td>
+        </tr>
         }
     </tbody>
 </table>

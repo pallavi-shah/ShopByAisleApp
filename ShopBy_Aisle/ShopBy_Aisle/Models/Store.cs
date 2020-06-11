@@ -19,5 +19,7 @@ namespace ShopBy_Aisle.Models
 
         public List<MasterItem> MasterItems { get; set; }
 
+        public string UserName { get; set; }
+
     }
 }

@@ -9,6 +9,7 @@ namespace ShopBy_Aisle.Models
     public class Aisle
     {
         public int ID { get; set; }
+        [Display(Name="Aisle")]
         public string Name { get; set; }
 
         [Display(Name = "Store")]

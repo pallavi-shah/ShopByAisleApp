@@ -34,16 +34,26 @@
 <hr />
 <form asp-action="Create">
     <div class="row">
-        <div class="col-md-12">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="col-md-6">
             <div class="form-group">
                 <input asp-for="ItemName" class="form-control" placeholder="Enter Item Name" />
                 <span asp-validation-for="ItemName" class="text-danger"></span>
             </div>
         </div>
-    </div>
-
-    <div class="row">
+        <div class="col-xs-3">
+                <div class="form-group" >
+                    <label asp-for="Quantity" class="form-control">Qty</label>
+                </div>
+            </div>
+        <br />
+            <div class="col-xs-3">
+                <div class="form-group">
+                    <input type="text" asp-for="Quantity" class="form-control" size="1" placeholder=""/>
+                    <span asp-validation-for="Quantity"></span>
+                </div>
+            </div>
+        </div>
+     <div class="row">
         <div class="col-md-6">
             <div class="form-group">
                 <select asp-for="CategoryID" class="form-control" asp-items="ViewBag.CategoryID" id="catID">
@@ -61,30 +71,49 @@
             </div>
         </div>
     </div>
-
     <div class="row">
         <div class="col-md-6">
             <div class="form-group">
-                <label class="form-control">Store Aisle</label>
-            </div>
-            </div>
-            <div class="col-md-6">
-                <div class="form-group">
-                    <input asp-for="Aisle.Name" id="aisleName" class="form-control" />
-                    </div>
+                <div class="col-xs-3">
+                    <input asp-for="Aisle.Name" id="aisleName" class="form-control" placeholder="Aisle" />
                 </div>
+            </div>
         </div>
-                <input asp-for="AisleID" id="aisleID" class="form-control" hidden />
+        <div class="col-md-6">
+            <div class="form-group" @ViewBag.sl_hidden>
+                <label asp-for="AddToShoppingList" class="control-label"></label>&emsp;&emsp;&emsp;
+                @if (@ViewBag.pg == "sl")
+                {
+                    <input type="checkbox" class="control-label" asp-for="AddToShoppingList" checked />
+                }
+                else
+                {
+                    <input type="checkbox" class="control-label" asp-for="AddToShoppingList" />
+                }
+            </div>
+        </div>
+        
+        <div class="form-group" @ViewBag.ml_hidden>
+            <label asp-for="MasterList" class="control-label">Add to Master List</label>
+            @if (@ViewBag.pg == "ml")
+            {
+                <input type="checkbox" asp-for="MasterList" class="control-label" checked  />
+            }
+            else
+            {
+                <input type="checkbox" asp-for="MasterList" class="control-label" />
+            }
+        </div>
+    </div>
 
-                <div class="form-group">
-                    <input type="submit" value="Save" class="btn btn-primary" />&emsp;&emsp;&emsp;&emsp;
-                    <label asp-for="AddToShoppingList" class="control-label"></label>
-                    <input type="checkbox" asp-for="AddToShoppingList" />
-                </div>
+    <input asp-for="AisleID" id="aisleID" class="form-control" hidden />
+    <br />
+    <div class="form-group">
+        <input type="submit" value="Save" class="btn btn-sm btn-primary" />&emsp;&emsp;&emsp;&emsp;
+        <button asp-action="Index" class="btn btn-sm btn-primary">Go Back</button>
+    </div>
 </form>
-    
 
-@*<div>
-    <a asp-action="Index">Back to List</a>
-</div>*@
+
+
 

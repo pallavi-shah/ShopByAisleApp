@@ -9,6 +9,7 @@ namespace ShopBy_Aisle.Models
     public class MasterItem
     {
         public int ID { get; set; }
+
         [Required]
         [Display(Name = "Item")]
         //[RegularExpression("([a-zA-Z])", ErrorMessage ="Invalid Item Name")]
@@ -31,5 +32,10 @@ namespace ShopBy_Aisle.Models
                 
         public Aisle Aisle { get; set; }
         public bool AddToShoppingList { get; set; }
+        
+        public bool Shopped { get; set; }
+        public int Quantity { get; set; }
+        public string UserName { get; set; }
+
     }
 }

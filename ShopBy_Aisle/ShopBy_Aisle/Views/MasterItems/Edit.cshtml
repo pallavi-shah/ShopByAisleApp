@@ -56,8 +56,19 @@
                 <input asp-for="Aisle.Name" class="form-control" id="aisleName" />
                 <span asp-validation-for="Aisle.Name" id="aisleName" class="text-danger"></span>
             </div>
-            <input asp-for="AisleID" id="aisleID" class="form-control" hidden />
             <div class="form-group">
+                <label asp-for="Quantity" class="control-label"></label>
+                <input asp-for="Quantity" class="form-control" id="qty" />
+                <span asp-validation-for="Aisle.Name" id="aisleName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AddToShoppingList" class="control-label"></label>
+                <input type="checkbox" asp-for="AddToShoppingList" id="shoplist" />
+            </div>
+            <input asp-for="AisleID" id="aisleID" class="form-control" hidden />
+            <input type="checkbox" asp-for="MasterList" checked hidden />
+            <div class="form-group">
+                <input asp-for="UserName" class="form-control" id="username" hidden/>
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </form>

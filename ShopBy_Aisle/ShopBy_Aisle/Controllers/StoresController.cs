@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using ShopBy_Aisle.Data;
 using ShopBy_Aisle.Models;
 using Newtonsoft.Json.Linq;
+using Microsoft.AspNetCore.Identity;
 
 namespace ShopByAisle.Controllers
 {
@@ -23,7 +24,8 @@ namespace ShopByAisle.Controllers
         // GET: Stores
         public async Task<IActionResult> Index()
         {
-            List<Store> Stores = await _context.Stores.ToListAsync();
+            string currentUser = User.Identity.Name;
+            List<Store> Stores = await _context.Stores.Where(s=>s.UserName==currentUser).ToListAsync();
             return View(Stores);
             //return View();
         }
@@ -69,6 +71,8 @@ namespace ShopByAisle.Controllers
         {
             if (ModelState.IsValid)
             {
+                string currentUser = User.Identity.Name;
+                store.UserName = currentUser;
                 _context.Add(store);
                 await _context.SaveChangesAsync();
                 return Redirect("Index");
@@ -162,6 +166,7 @@ namespace ShopByAisle.Controllers
             return _context.Stores.Any(e => e.ID == id);
         }
 
+        //Method to add store from Google maps.
         public JsonResult AddStore(string JsonStr)
         {
             JObject jsondata = JObject.Parse(JsonStr);
@@ -179,9 +184,12 @@ namespace ShopByAisle.Controllers
                     myStore.Name = jsondata["name"].ToString(); ;
                     myStore.Address = jsondata["address"].ToString();
                     myStore.Alias = jsondata["alias"].ToString();
+                    myStore.UserName = User.Identity.Name;
                     _context.Stores.Add(myStore);
                     _context.SaveChanges();
-                    return Json(new { success = true, message = "Store Added to your favorites." });
+                    jsondata["id"] = myStore.ID;
+                    return Json(new { success = true, message = "Store Added to your favorites.",nsID=myStore.ID, 
+                    nsAlias=myStore.Alias, nsAddress = myStore.Address, nsUserName=myStore.UserName, nsName= myStore.Name });
 
                 }
                 catch (Exception)
