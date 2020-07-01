@@ -13,7 +13,6 @@ namespace ShopByAisle.Controllers
     public class CategoriesController : Controller
     {
         private readonly ApplicationDbContext _context;
-
         public CategoriesController(ApplicationDbContext context)
         {
             _context = context;
@@ -33,13 +32,11 @@ namespace ShopByAisle.Controllers
                 return NotFound();
             }
 
-            var category = await _context.Categories
-                .FirstOrDefaultAsync(m => m.ID == id);
+            var category = await _context.Categories.FirstOrDefaultAsync(m => m.ID == id);
             if (category == null)
             {
                 return NotFound();
             }
-
             return View(category);
         }
 
@@ -50,8 +47,7 @@ namespace ShopByAisle.Controllers
         }
 
         // POST: Categories/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ID,Name")] Category category)
@@ -82,8 +78,7 @@ namespace ShopByAisle.Controllers
         }
 
         // POST: Categories/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("ID,Name")] Category category)

@@ -130,8 +130,6 @@ C:\Users\conta\Desktop\codergirl\ShopByAisleApp\ShopBy_Aisle\ShopBy_Aisle\bin\De
 C:\Users\conta\Desktop\codergirl\ShopByAisleApp\ShopBy_Aisle\ShopBy_Aisle\obj\Debug\netcoreapp3.1\ShopBy_Aisle.csprojAssemblyReference.cache
 C:\Users\conta\Desktop\codergirl\ShopByAisleApp\ShopBy_Aisle\ShopBy_Aisle\obj\Debug\netcoreapp3.1\staticwebassets\ShopBy_Aisle.StaticWebAssets.Manifest.cache
 C:\Users\conta\Desktop\codergirl\ShopByAisleApp\ShopBy_Aisle\ShopBy_Aisle\obj\Debug\netcoreapp3.1\staticwebassets\ShopBy_Aisle.StaticWebAssets.xml
-C:\Users\conta\Desktop\codergirl\ShopByAisleApp\ShopBy_Aisle\ShopBy_Aisle\obj\Debug\netcoreapp3.1\ShopBy_Aisle.MvcApplicationPartsAssemblyInfo.cs
-C:\Users\conta\Desktop\codergirl\ShopByAisleApp\ShopBy_Aisle\ShopBy_Aisle\obj\Debug\netcoreapp3.1\ShopBy_Aisle.MvcApplicationPartsAssemblyInfo.cache
 C:\Users\conta\Desktop\codergirl\ShopByAisleApp\ShopBy_Aisle\ShopBy_Aisle\obj\Debug\netcoreapp3.1\ShopBy_Aisle.RazorAssemblyInfo.cache
 C:\Users\conta\Desktop\codergirl\ShopByAisleApp\ShopBy_Aisle\ShopBy_Aisle\obj\Debug\netcoreapp3.1\ShopBy_Aisle.RazorAssemblyInfo.cs
 C:\Users\conta\Desktop\codergirl\ShopByAisleApp\ShopBy_Aisle\ShopBy_Aisle\obj\Debug\netcoreapp3.1\ShopBy_Aisle.AssemblyInfoInputs.cache
@@ -181,7 +179,6 @@ C:\Users\conta\Desktop\codergirl\ShopByAisleApp\ShopBy_Aisle\ShopBy_Aisle\obj\De
 C:\Users\conta\Desktop\codergirl\ShopByAisleApp\ShopBy_Aisle\ShopBy_Aisle\obj\Debug\netcoreapp3.1\Razor\Views\Stores\Details.cshtml.g.cs
 C:\Users\conta\Desktop\codergirl\ShopByAisleApp\ShopBy_Aisle\ShopBy_Aisle\obj\Debug\netcoreapp3.1\Razor\Views\Stores\Edit.cshtml.g.cs
 C:\Users\conta\Desktop\codergirl\ShopByAisleApp\ShopBy_Aisle\ShopBy_Aisle\obj\Debug\netcoreapp3.1\Razor\Views\Stores\Index.cshtml.g.cs
-C:\Users\conta\Desktop\codergirl\ShopByAisleApp\ShopBy_Aisle\ShopBy_Aisle\obj\Debug\netcoreapp3.1\Razor\Views\Stores\Maps.cshtml.g.cs
 C:\Users\conta\Desktop\codergirl\ShopByAisleApp\ShopBy_Aisle\ShopBy_Aisle\obj\Debug\netcoreapp3.1\Razor\Views\_ViewImports.cshtml.g.cs
 C:\Users\conta\Desktop\codergirl\ShopByAisleApp\ShopBy_Aisle\ShopBy_Aisle\obj\Debug\netcoreapp3.1\Razor\Views\_ViewStart.cshtml.g.cs
 C:\Users\conta\Desktop\codergirl\ShopByAisleApp\ShopBy_Aisle\ShopBy_Aisle\obj\Debug\netcoreapp3.1\ShopBy_Aisle.RazorTargetAssemblyInfo.cache
@@ -190,4 +187,7 @@ C:\Users\conta\Desktop\codergirl\ShopByAisleApp\ShopBy_Aisle\ShopBy_Aisle\obj\De
 C:\Users\conta\Desktop\codergirl\ShopByAisleApp\ShopBy_Aisle\ShopBy_Aisle\obj\Debug\netcoreapp3.1\ShopBy_Aisle.csproj.CopyComplete
 C:\Users\conta\Desktop\codergirl\ShopByAisleApp\ShopBy_Aisle\ShopBy_Aisle\obj\Debug\netcoreapp3.1\ShopBy_Aisle.dll
 C:\Users\conta\Desktop\codergirl\ShopByAisleApp\ShopBy_Aisle\ShopBy_Aisle\obj\Debug\netcoreapp3.1\ShopBy_Aisle.pdb
-C:\Users\conta\Desktop\codergirl\ShopByAisleApp\ShopBy_Aisle\ShopBy_Aisle\obj\Debug\netcoreapp3.1\Razor\Views\ShoppingList\Index.cshtml.g.cs
+C:\Users\conta\Desktop\codergirl\ShopByAisleApp\ShopBy_Aisle\ShopBy_Aisle\obj\Debug\netcoreapp3.1\Razor\Views\Home\help.cshtml.g.cs
+C:\Users\conta\Desktop\codergirl\ShopByAisleApp\ShopBy_Aisle\ShopBy_Aisle\obj\Debug\netcoreapp3.1\Razor\Views\Home\About.cshtml.g.cs
+C:\Users\conta\Desktop\codergirl\ShopByAisleApp\ShopBy_Aisle\ShopBy_Aisle\obj\Debug\netcoreapp3.1\ShopBy_Aisle.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\conta\Desktop\codergirl\ShopByAisleApp\ShopBy_Aisle\ShopBy_Aisle\obj\Debug\netcoreapp3.1\ShopBy_Aisle.MvcApplicationPartsAssemblyInfo.cache

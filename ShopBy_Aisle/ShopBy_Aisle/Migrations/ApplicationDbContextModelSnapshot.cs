@@ -235,6 +235,9 @@ namespace ShopBy_Aisle.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("PlaceID")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("StoreID")
                         .HasColumnType("int");
 
@@ -272,10 +275,10 @@ namespace ShopBy_Aisle.Migrations
                     b.Property<bool>("AddToShoppingList")
                         .HasColumnType("bit");
 
-                    b.Property<int>("AisleID")
+                    b.Property<int?>("AisleID")
                         .HasColumnType("int");
 
-                    b.Property<int>("CategoryID")
+                    b.Property<int?>("CategoryID")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("DateShopped")
@@ -286,19 +289,18 @@ namespace ShopBy_Aisle.Migrations
 
                     b.Property<string>("ItemName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(20)")
-                        .HasMaxLength(20);
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("MasterList")
                         .HasColumnType("bit");
 
-                    b.Property<int>("Quantity")
+                    b.Property<int?>("Quantity")
                         .HasColumnType("int");
 
                     b.Property<bool>("Shopped")
                         .HasColumnType("bit");
 
-                    b.Property<int>("StoreID")
+                    b.Property<int?>("StoreID")
                         .HasColumnType("int");
 
                     b.Property<string>("UserName")
@@ -332,6 +334,9 @@ namespace ShopBy_Aisle.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PlaceID")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserName")
@@ -413,20 +418,17 @@ namespace ShopBy_Aisle.Migrations
                     b.HasOne("ShopBy_Aisle.Models.Aisle", "Aisle")
                         .WithMany()
                         .HasForeignKey("AisleID")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("ShopBy_Aisle.Models.Category", "Category")
                         .WithMany()
                         .HasForeignKey("CategoryID")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("ShopBy_Aisle.Models.Store", "PreferredStore")
                         .WithMany("MasterItems")
                         .HasForeignKey("StoreID")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 #pragma warning restore 612, 618
         }

@@ -24,35 +24,53 @@
             color: white;
             padding: 8px;
             font-family: Arial;
-            width: 5100px;
+            width: 100%;
         }
 
         .info {
             background-color: #2196F3;
         }
+
+        #mapSearch {
+            width: 100%;
+            height: 30px;
+            text-align: center;
+        }
     </style>
-
     <br />
-    <span class="btn btn-primary btn-sm btn-block">Favorite Stores</span>
-    <hr />
-    <hr />
-
-    <span class="label bg-secondary">Search Nearby Stores</span>
     <br />
-    <input type="text" class="controls" id="mapSearch" placeholder="Search Store" size="50" />
+    
+    <div>
+        <div style="text-align:right">
+            <a href="#storetable" style="font-weight:bold;font-size:14px"> GO TO MY STORES LIST</a>
+        </div>
+        <br />
+        <br />
+        <div style="text-align:center">
+            <span class="btn btn-sm btn-block btn-primary">ADD STORE USING GOOGLE MAP</span>
+        </div>
+    </div>
+    
     <br />
+    
+    <span style="font-size:smaller; color:darkslateblue; font-weight:bold">&emsp;*NOTE : Search store in google map and click on the icon to add it to your stores list.</span>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12 col-xs-12">
+                <input type="text" class="controls" id="mapSearch" placeholder="Search Store" style="text-align:center; font-size:16px"/>
+            </div>
+        </div>
+    </div>
     <br />
     <div class="container">
-        <div id="map"></div>
+        <div id="map" style='width:100%;height:400px;'></div>
         <script>
-
             var jsonSelected = {};
             var infowindowSelected = null;
-
-
             function addStore() {
                 flagsave = confirm("Do you want to add " + jsonSelected["name"] + " \nAddress: " + jsonSelected["address"]);
                 if (flagsave == true) {
+                    document.getElementById("mapSearch").value = "";
                     $.ajax({
                         url: '/Stores/AddStore',
                         type: 'POST',
@@ -62,18 +80,18 @@
                             if (data.success) {
                                 infowindowSelected.setContent(data.message);
                                 elementstorebody = document.getElementById("storetable");
-                                elementstorebody.innerHTML += getNetStoreRow(data); 
+                                elementstorebody.innerHTML += getNewStoreRow(data);
                                 console.log(data.newstore);
                             } else {
                                 infowindowSelected.setContent("Sorry, Unable to save, please try again.....");
-
                             }
                         }
                     })
                 }
-
             }
-            function getNetStoreRow(storedata) {
+
+            // function to add store to the storesList dynamically
+            function getNewStoreRow(storedata) {
                 if (storedata.nsID != undefined) {
                     str_tr = " <tr> <td>";
                     str_tr += storedata.nsName;   // kohls
@@ -82,23 +100,23 @@
                     str_tr += "</td> <td hidden>";
                     str_tr += storedata.nsUserName; // test100@gmail.com
                     str_tr += "</td> <td>";
-                    str_tr += "<a href='/Stores/Edit/" + storedata.nsID + "'>Edit</a> |";
-                    str_tr += "<a href='/Stores/Details/" + storedata.nsID + "'>Details</a> |";
-                    str_tr += "<a href='/Stores/Delete/" + storedata.nsID + "'>Delete</a> ";
+                    str_tr += "<a href='/Stores/Edit/" + storedata.nsID + "'><img src='/Images/Pencil-icon.png' width='20' height='20'/></a> ";
+                    str_tr += "</td> <td>";
+                    str_tr += "<a href='/Stores/Delete/" + storedata.nsID + "'><img src='/Images/EDelete-icon.png' width='20' height='20'</a> ";
                     str_tr += "</td> </tr";
                 }
                 return str_tr;
             }
-
+            // Function to initialise Google map
             function initMap() {
                 var map;
                 var center = { lat: 38.6278756, lng: - 90.5751173 };
                 map = new google.maps.Map(document.getElementById('map'), {
                     center: center,
-                    zoom: 13
+                    zoom: 13,
+                    streetViewControl: false,
+                    disableDefaultUI: true
                 });
-
-
                 if (navigator.geolocation) {
                     navigator.geolocation.getCurrentPosition(function (position) {
                         var pos = {
@@ -111,11 +129,10 @@
                 };
 
                 // Create the search box and link it to the UI element.
+
                 var input = document.getElementById('mapSearch');
                 var searchBox = new google.maps.places.SearchBox(input);
                 map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
-                //autocomplete.bindTo('bounds', map);
-
 
                 // Bias the SearchBox results towards current map's viewport.
                 map.addListener('bounds_changed', function () {
@@ -150,7 +167,7 @@
                             size: new google.maps.Size(71, 71),
                             origin: new google.maps.Point(0, 0),
                             anchor: new google.maps.Point(17, 34),
-                            scaledSize: new google.maps.Size(25, 25)
+                            scaledSize: new google.maps.Size(50, 50)
                         };
 
                         // Create a marker for each place.
@@ -173,90 +190,62 @@
 
                         for (j = 0; j < markers.length; j++) {
                             markers[j].addListener('click', function () {
-
                                 jsonSelected["name"] = this.title;
                                 jsonSelected["alias"] = this.title;
-
                                 var str_addr = "";
                                 geocoder.geocode({ 'location': this.position }, function (results, status) {
-                                    //alert("hi" + status);
-
                                     if (status === 'OK') {
-
                                         if (results[0]) {
                                             jsonSelected["address"] = results[0].formatted_address;
-
                                             infowindowSelected = infowindow;
-                                            console.log("result = " + results);
+                                            console.log("place_id = " + results[0].place_id);
+                                            jsonSelected["place_id"] = results[0].place_id;
+                                            jsonSelected["testvalue"] = "newcode";
+                                            console.log("short_name = " + results[0].address_components[0].short_name);
+                                            console.log("this.position = " + this.position);
                                             infowindow.setContent(results[1].formatted_address);
-
                                             addStore();
-                                            // onclick = addStore(str_addr, str_name, str_alias);
                                         };
                                     };
                                 }); // end of geocode function
-
                                 infowindow.setContent(this.title);
                                 infowindow.open(map, this);
                             });
                         } // end of for
                     });
-
                     map.fitBounds(bounds);
                 });
-
             };
-
-        </script>
-
+         </script>
     </div>
-
     <hr />
-
-    <span class="btn btn-primary btn-lg btn-block">My Stores</span>
+    <br />
+    <br />
+    <span class="btn btn-primary btn-sm btn-block">MY STORES</span>
 </body>
+
 @* =============================Add Store form========================*@
 <p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            @*<th>
-                @Html.DisplayNameFor(model => model.Alias)
-            </th>*@
-            <th>
-                @Html.DisplayNameFor(model => model.Address)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody id="storetable">
-        @foreach (var item in Model)
-        {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            @*<td>
-            @Html.DisplayFor(modelItem => item.Alias)
-        </td>*@
-            <td>
-                @Html.DisplayFor(modelItem => item.Address)
-            </td>
-            <td hidden>
-                @Html.DisplayFor(modelItem => item.UserName)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
-            </td>
-        </tr>
-        }
-    </tbody>
-</table>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-xs-12">
+                <div class="table-responsive">
+                    <table class="table">
+                        <tbody id="storetable">
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@Html.DisplayFor(modelItem => item.Alias)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.Address)</td>
+                                    <td hidden>@Html.DisplayFor(modelItem => item.UserName)</td>
+                                    <td><a asp-action="Edit" asp-route-id="@item.ID"><img src="/Images/Pencil-icon.png" width="20" height="20" /></a></td>
+                                    <td><a asp-action="Delete" asp-route-id="@item.ID"><img src="/Images/EDelete-icon.png" width="20" height="20" /></a></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
 

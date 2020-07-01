@@ -14,11 +14,8 @@ namespace ShopBy_Aisle.Models
         public string Alias { get; set; }
         public string Address { get; set; }
         public string Email { get; set; }
-
-        //public List<Aisle> Aisles { get; set; }
-
+        public string PlaceID { get; set; }
         public List<MasterItem> MasterItems { get; set; }
-
         public string UserName { get; set; }
 
     }

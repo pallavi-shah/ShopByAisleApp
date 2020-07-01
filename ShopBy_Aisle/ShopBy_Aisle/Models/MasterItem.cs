@@ -12,15 +12,13 @@ namespace ShopBy_Aisle.Models
 
         [Required]
         [Display(Name = "Item")]
-        //[RegularExpression("([a-zA-Z])", ErrorMessage ="Invalid Item Name")]
-        [StringLength(20, MinimumLength = 3)]
         public string ItemName { get; set; }
         public Category Category { get; set; }
         [Display(Name = "Category")]
-        public int CategoryID { get; set; }
+        public int? CategoryID { get; set; }
 
         [Display(Name = "Store")]
-        public int StoreID { get; set; }
+        public int? StoreID { get; set; }
         public Store PreferredStore { get; set; }
 
         public string Email { get; set; }
@@ -28,13 +26,13 @@ namespace ShopBy_Aisle.Models
 
         [DataType(DataType.Date)]
         public DateTime DateShopped { get; set; }
-        public int AisleID { get; set; }
+        public int? AisleID  { get; set; }
                 
         public Aisle Aisle { get; set; }
         public bool AddToShoppingList { get; set; }
         
         public bool Shopped { get; set; }
-        public int Quantity { get; set; }
+        public int? Quantity { get; set; }
         public string UserName { get; set; }
 
     }

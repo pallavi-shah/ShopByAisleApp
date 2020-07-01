@@ -14,7 +14,6 @@ namespace ShopByAisle.Controllers
     public class AislesController : Controller
     {
         private readonly ApplicationDbContext _context;
-
         public AislesController(ApplicationDbContext context)
         {
             _context = context;
@@ -27,40 +26,18 @@ namespace ShopByAisle.Controllers
             return View(await applicationDbContext.ToListAsync());
         }
 
-        // GET: Aisles/Details/5
-        /*public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var aisle = await _context.Aisles
-                .Include(a => a.Store)
-                .FirstOrDefaultAsync(m => m.ID == id);
-            if (aisle == null)
-            {
-                return NotFound();
-            }
-
-            return View(aisle);
-        }*/
-
         // GET: Aisles/Create
         public IActionResult Create()
         {
             ViewData["StoreID"] = new SelectList(_context.Stores, "ID", "Alias");
             ViewData["CategoryID"] = new SelectList(_context.Categories, "ID", "Name");
-
             return View();
         }
 
         // POST: Aisles/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Create([Bind("ID,Name,StoreID,CategoryID,UserID")] Aisle aisle)
         public async Task<IActionResult> Create(Aisle aisle)
         {
             Aisle newAisle = new Aisle();
@@ -98,8 +75,7 @@ namespace ShopByAisle.Controllers
         }
 
         // POST: Aisles/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("ID,Name,StoreID,CategoryID,UserID")] Aisle aisle)

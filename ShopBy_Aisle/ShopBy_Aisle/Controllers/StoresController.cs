@@ -15,7 +15,6 @@ namespace ShopByAisle.Controllers
     public class StoresController : Controller
     {
         private readonly ApplicationDbContext _context;
-
         public StoresController(ApplicationDbContext context)
         {
             _context = context;
@@ -27,46 +26,12 @@ namespace ShopByAisle.Controllers
             string currentUser = User.Identity.Name;
             List<Store> Stores = await _context.Stores.Where(s=>s.UserName==currentUser).ToListAsync();
             return View(Stores);
-            //return View();
-        }
-
-        public async Task<IActionResult> Maps()
-        {
-            return View(await _context.Stores.ToListAsync());
-            //return View();
-        }
-
-        // GET: Stores/Details/5
-        /*public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var store = await _context.Stores
-                .FirstOrDefaultAsync(m => m.ID == id);
-            if (store == null)
-            {
-                return NotFound();
-            }
-
-            return View(store);
-        }*/
-
-        // GET: Stores/Create
-        public IActionResult Create()
-        {
-
-            return View();
         }
 
         // POST: Stores/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Create([Bind("ID,Name,Alias,Address")] Store store)
         public async Task<IActionResult> Create([Bind("ID,Name,Alias,Address")] Store store)
         {
             if (ModelState.IsValid)
@@ -77,7 +42,6 @@ namespace ShopByAisle.Controllers
                 await _context.SaveChangesAsync();
                 return Redirect("Index");
             }
-
             return View(store);
         }
 
@@ -98,21 +62,18 @@ namespace ShopByAisle.Controllers
         }
 
         // POST: Stores/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,Name,Alias,Address")] Store store)
+        public async Task<IActionResult> Edit(int id,string Alias)
         {
-            if (id != store.ID)
-            {
-                return NotFound();
-            }
-
+            Store store = _context.Stores.Single(s => s.ID == id);
+            store.Alias = Alias;
             if (ModelState.IsValid)
             {
                 try
                 {
+                    string currentUser = User.Identity.Name;
+                    store.UserName = currentUser;
                     _context.Update(store);
                     await _context.SaveChangesAsync();
                 }
@@ -156,7 +117,12 @@ namespace ShopByAisle.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var store = await _context.Stores.FindAsync(id);
-            _context.Stores.Remove(store);
+            IEnumerable<MasterItem> masterItems = _context.MasterItems.Where(m => m.StoreID == id);
+            foreach(MasterItem m in masterItems)
+            {
+                _context.MasterItems.Remove(m);
+            }
+            store.UserName = "";
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
@@ -165,16 +131,16 @@ namespace ShopByAisle.Controllers
         {
             return _context.Stores.Any(e => e.ID == id);
         }
-
-        //Method to add store from Google maps.
+        
+        //Method to add store from Google maps using ajax call
         public JsonResult AddStore(string JsonStr)
         {
+            string currentUser = User.Identity.Name;
             JObject jsondata = JObject.Parse(JsonStr);
             try
             {
-                Store myStore = _context.Stores.Single(s => s.Address == jsondata["address"].ToString());
+                Store myStore = _context.Stores.Single(s => s.Address == jsondata["address"].ToString() && s.UserName==currentUser);
                 return Json(new { success = true, message = "Store already exists in your favorites." });
-
             }
             catch (Exception)
             {
@@ -185,19 +151,18 @@ namespace ShopByAisle.Controllers
                     myStore.Address = jsondata["address"].ToString();
                     myStore.Alias = jsondata["alias"].ToString();
                     myStore.UserName = User.Identity.Name;
+                    myStore.PlaceID = jsondata["place_id"].ToString();
                     _context.Stores.Add(myStore);
                     _context.SaveChanges();
                     jsondata["id"] = myStore.ID;
                     return Json(new { success = true, message = "Store Added to your favorites.",nsID=myStore.ID, 
                     nsAlias=myStore.Alias, nsAddress = myStore.Address, nsUserName=myStore.UserName, nsName= myStore.Name });
-
                 }
                 catch (Exception)
                 {
                     return Json(new { success = true, message = "Error, Please Try again." });
                 }
             }
-
         }
     }
 }

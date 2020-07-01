@@ -15,7 +15,7 @@ namespace ShopBy_Aisle.Models
         [Display(Name = "Store")]
         public int StoreID { get; set; }
         public Store Store { get; set; }
-
+        public string PlaceID { get; set; }
         public int CategoryID { get; set; }
         public Category Category { get; set; }
         public string Email { get; set; }

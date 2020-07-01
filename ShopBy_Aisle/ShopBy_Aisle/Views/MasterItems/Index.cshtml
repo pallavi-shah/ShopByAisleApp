@@ -2,94 +2,228 @@
 
 @{
     ViewData["Title"] = "MasterItems";
-}
+}   <header>
+        <style>
+            .rightalign
+            {
+                display:block;
+                text-align:right;
+            }
+
+            #icons{
+                width:20px;
+                height:20px;
+            }
+            .table{
+                width:100%;
+                    border-collapse: collapse;
+            }
+            .table td{
+                padding:12px 15px;
+                border:1px solid #ddd;
+                text-align:center;
+            }
+        </style>
+    </header>
 
     <body>
         <br />
         <br />
-        <div class="form-group">
+        @*======Form for Item Search/sorting/filtering data/clearing shopped items from the list=====*@
+        <div class="container">
             <form method="get" action="/MasterItems/FindItem">
                 <input type="text" name="pg" value="@ViewBag.pg" hidden />
-                <input type="text" placeholder="Search an item" name="searchTerm" />
-                <input type="submit" value="search" class="btn btn-sm btn-dark" />
-                <input type="button" onclick="DisplayAdd()" class="btn btn-sm btn-primary" value="Add New Item" id="addNewItem_button" />
+                <div class="row">
+                    <div class="col-lg-3 col-md-12 col-xs-12">
+                        <div class="input-group mb-3">
+                            <div class="input-group-append">
+                                <input type="text" placeholder="Search an item" name="searchTerm" value="@ViewBag.searchTerm" />
+                                <button type="submit" value="Search" class="btn  btn-sm"><img src="~/Images/Magnifyingglass1.png" width="20" height="20" /></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-12 col-xs-12">
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <select asp-items="@ViewBag.StoreID" name="storeId" id="filterBy" onchange="this.form.submit()" class="custom-select-sm mb-3">
+                                    <option value="0" style="color:lightgray">Filter By</option>
+                                </select>
+                                <label class="input-group btn-sm mb-3"><img src="~/Images/filter.png" width="20" height="20" /></label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-2 col-md-12 col-xs-12">
+                        <div class="input-group mb-sm-3">
+                            <div class="input-group-prepend">
+                                <select asp-items="@ViewBag.sortByAisle" name="sortByColumn" id="sortBy" onchange="this.form.submit()" class="custom-select-sm mb-3">
+                                    <option value="0">Sort By</option>
+                                </select>
+                                <label class="input-group btn-sm mb-3"><img src="~/Images/sort.png" width="20" height="20" /></label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <input type="text" name="myaction" id="myaction" value="none" hidden />
+
+                    <div class="btn-toolbar">
+                        <div class="col-xs-6">
+                            @*Button to add new Item*@
+                            <input type="button" onclick="clearData(); DisplayAdd()" class="btn btn-sm btn-primary" value="Add New Item" id="addNewItem_button" /> &emsp;&emsp; 
+                        </div>
+
+                        <div class="col-xs-6">
+                            <input type="button" value="Clear Shopped Items" class="btn btn-sm btn-primary" name="shoppedItems" onclick="func_clearshopped(this)" @ViewBag.ml_hidden />
+                        </div>
+                    </div>
+                </div>
             </form>
         </div>
-        <p class="text-danger">@TempData["Error"]</p>
+        <br />
+        @*======Display add new item section when add new item button clicked========= *@
         <section>
             <div class="form-group" id="newItemDiv" hidden>
                 <br />
-                <span class="btn btn-success btn-sm btn-block">New Item </span>
+                <span class="btn btn-success btn-sm btn-block">NEW ITEM </span>
                 @await Html.PartialAsync("CreatePartial", @ViewData["Item"])
             </div>
         </section>
         <br />
-        @if (ViewBag.Results == true)
-        {
+        
+        <div class="container">
             <div class="row">
-                <p class="col-6 text-danger">
-                    @TempData["Message"]
-                </p>
-                <p class="col-6 text-right">
-                    <a asp-controller="MasterItems" asp-action="Index">Back to List</a>
-                </p>
+                @if (ViewBag.Results == true)
+                {
+                    <div class="col-6" style="text-align:left">
+                        @TempData["Message"]
+
+                        @TempData["Error"]
+                    </div>
+                    <div class="col-6" style="text-align:right">
+                        <a asp-controller="MasterItems" asp-action="Index" asp-route-pg="@ViewBag.pg"> Back to Full List</a>
+                    </div>
+                }   
             </div>
-        }
 
-        @if (ViewBag.pg == "ml")
-        {
-            <span class="btn btn-success btn-sm btn-block">Frequently Shopped Items List</span>
-        }
-        else
-        {
-            <span class="btn btn-success btn-sm btn-block">My Shopping List</span>
-        }
+            <div class="row">
+                <div class="col-12">
+                    @if (ViewBag.pg == "ml")
+                    {
+                        <span class="btn btn-warning btn-sm btn-block" style=" font-family: Georgia ; font-size: medium">
+                            MY FAVORITE ITEMS<br />
+                            <span style="font-size:small"> (Frequently Shopped)</span>
+                        </span>
+                    }
+                    else
+                    {
+                        <span class="btn btn-success btn-sm btn-block" style="font-family: Georgia; font-size:medium">MY SHOPPING LIST</span>
+                    }
+                </div>
+            </div>
+        </div>
 
-        <table class="table">
+        <br />
+        @*=====================Div to display shopping list/favorite Items List=================*@
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 col-xs-12">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                 <tr>
+                                    <td @ViewBag.ml_hidden>
+                                        <input type="checkbox" checked=@item.Shopped name="shopped" onclick="update_sl(this)" value="@item.ID" />
+                                        <label style="font-size:x-small"><img src="~/Images/thumsup.png" id="icons" /></label>
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.ItemName)<br />
+                                        (@Html.DisplayFor(modelItem => item.Category.Name))<br />
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.PreferredStore.Alias)<br />
+                                        Aisle: @Html.DisplayFor(modelItem => item.Aisle.Name)
+                                    </td>
+                                    <td>
+                                        <label asp-for="@item.Quantity">Qty: </label>
+                                        @Html.DisplayFor(modelItem => item.Quantity)
+                                    </td>
+                                    <td @ViewBag.sl_hidden>
+                                        <label asp-for="@item.AddToShoppingList"><img src="~/Images/add_toshoppingcart.png" width="40" height="40" /></label>&nbsp;
+                                        <input type="checkbox" checked=@item.AddToShoppingList name="add_shop" onclick="update_sl(this)" value="@item.ID" />
+                                    </td>
+                                    <td @ViewBag.ml_hidden>
+                                        <label asp-for="@item.MasterList"><img src="~/Images/addtomasterlist.png" width="25" height="25" /></label>&nbsp;
+                                        <input type="checkbox" checked=@item.MasterList name="add_master" onclick="update_sl(this)" value="@item.ID" />
+                                    </td>
+                                    <td>
+                                        <a asp-action="Edit" asp-route-id="@item.ID" asp-route-pg="@ViewBag.pg"><img src="~/Images/Pencil-icon.png" id="icons" /></a>
+                                    </td>
+                                    <td>
+                                        <a asp-action="Delete" asp-route-id="@item.ID"><img src="~/Images/EDelete-icon.png" id="icons" /></a>
+                                    </td>
+                                </tr>
+                                }
+                            </tbody>
+                        </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br />
+            <br />
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12" style="text-align:right; font-size:small; color:darkred">
 
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.ItemName)<br />
-                        (@Html.DisplayFor(modelItem => item.Category.Name))<br />
+                        @if (ViewBag.pg == "ml")
+                        {
+                            <div>
+                                * <img src="~/Images/add_toshoppingcart.png" width="30" height="30" /> -Add to Shopping List
+                            </div>
+                        }
+                        else
+                        {
+                            <div>
+                                * <img src="~/Images/thumsup.png" width="20" height="20" /> - Shopped ; &emsp;
+                                * <img src="~/Images/addtomasterlist.png" width="20" height="20" /> - Add to My Favorite Items
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
 
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.PreferredStore.Alias)<br />
-                        Aisle: @Html.DisplayFor(modelItem => item.Aisle.Name)
-
-                    </td>
-                    <td>
-                        <label asp-for="@item.Quantity">Qty: </label>
-                        @Html.DisplayFor(modelItem => item.Quantity)
-                    </td>
-
-                    <td @ViewBag.sl_hidden>
-                        <label asp-for="@item.AddToShoppingList">Add to Shopping List</label>&nbsp;
-                        <input type="checkbox" checked=@item.AddToShoppingList name="add_shop" onclick="update_sl(this)" value="@item.ID" />
-                    </td>
-                    <td @ViewBag.ml_hidden>
-                        <label asp-for="@item.MasterList">Add to Master List</label>&nbsp;
-                        <input type="checkbox" checked=@item.MasterList name="add_master" onclick="update_sl(this)" value="@item.ID"/>
-                    </td>
-                    <td>
-                        <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
-                        @*<a asp-action="Details" asp-route-id="@item.ID">Details</a> |*@
-                        <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
-                    </td>
-
-                </tr>
-            }
-        </table>
-        <script>
+      <script>
             function DisplayAdd() {
                 var var_newItemDiv = document.getElementById("newItemDiv");
                 if (var_newItemDiv.hidden == true) {
+                    document.getElementById("addNewItem_button").hidden=true;
                     var_newItemDiv.hidden = false;
                 }
                 else
+                {
+                    document.getElementById("addNewItem_button").value = "Add New Item";
                     var_newItemDiv.hidden = true;
+                }
+            }
+
+            function clearData() {
+                console.log("in clearData() enter");
+                document.forms["myform"]["ItemName"].value = "";
+                document.forms["myform"]["Quantity"].value = "";
+                document.forms["myform"]["CategoryID"].value = "Select Category";
+                document.forms["myform"]["StoreID"].value = "Select Store";
+                console.log("in clearData() exit");
+            }
+
+            function func_clearshopped(btn_click) {
+                flagclear = confirm("Do you want to clear the shopped items from the list. " );
+                if (flagclear == true) {
+                    document.getElementById('myaction').value = 'clearshoppeditem';
+                    btn_click.form.submit();
+                }
             }
 
             function update_sl(selectedCheckbox) {
@@ -108,8 +242,7 @@
                     }
                 })
             };
-
-        </script>
-        <br />
-        <br />
-    </body>
+    </script>
+    <br />
+    <br />
+</body>

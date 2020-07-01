@@ -3,85 +3,140 @@
 @{
     ViewData["Title"] = "AddMasterItem";
 }
+<head>
+    <style>
+        ::-webkit-input-placeholder{
+            color:lightgrey
+        }
+
+        #defaultvalue{
+          color:lightgrey;
+        }
+    </style>
+</head>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
 <script type="text/javascript">
-    $(document).ready(function () {
-        $("#storeID").change(function () {
-            selectedValues = { storeID: $("#storeID").val(), catID: $("#catID").val() };
-            $.ajax({
-                url: '/MasterItems/GetAisleData',
-                type: 'POST',
-                dataType: 'json',
-                data: { JsonStr: JSON.stringify(selectedValues) },
-                success: function (data) {
-                    if (data.success) {
-                        document.getElementById("aisleID").value = data.aisleID;
-                        document.getElementById("aisleName").value = data.aisleName;
+    function getAisle() {
+        var storeval = $("#storeID").val();
+        var categoryval = $("#catID").val();
+        if ( storeval === "Select Store" || categoryval === "Select Category") {
+            return;
+        }
+
+        // If Storevalue is blank then disable the AisleID column.
+        if (storeval == "Select Store") {
+            document.getElementById("aisleName").readOnly = true;
+        } else {
+            document.getElementById("aisleName").readOnly = false;
+        }
+
+        selectedValues = { storeID: $("#storeID").val(), catID: $("#catID").val() };
+        $.ajax({
+            url: '/MasterItems/GetAisleData',
+            type: 'POST',
+            dataType: 'json',
+            data: { JsonStr: JSON.stringify(selectedValues) },
+            success: function (data) {
+                if (data.success) {
+                    document.getElementById("aisleID").value = data.aisleID;
+                    document.getElementById("aisleName").value = data.aisleName;
+
+                    // Display msg if we find the Aisle data
+                    if (data.aisleName == "" || data.aisleName == null) {
+                        img_tag = "<img src='/Images/help.gif' width='60' height='60'/>";
+                        ty_tag = "<img src='/Images/thankyou.gif' width='70' height='70'/>";
+                        document.getElementById("aisle_validate").innerHTML ="Sorry, We do not have an Aisle for this item.If you know please update & "+ img_tag +"other shoppers." ;
+                        document.getElementById("aisle_validate").style = "color: brown ;"
+                    } else {
+                        img_tag = "<img src='/Images/happy.gif' width='60' height='60'/>";
+                        document.getElementById("aisle_validate").innerHTML = img_tag + "Yay! we found the Aisle for you. Enjoy Shopping.";
+                        document.getElementById("aisle_validate").style = "color:blue;"
                     }
                 }
-            })
-        });
-    });
+            }
+        })
+    };
 
+    // Validate the FORM data
+    function validateForm() {
+        
+        var x = document.forms["myform"]["ItemName"].value;
+        if (x == "") {
+            document.getElementById("item_validate").innerHTML = "Item Name cannot be blank.";
+            return false;
+        } else if (x.length < 3)
+        {
+            document.getElementById("item_validate").innerHTML = "Minimum three characters required for Item Name.";
+            return false;
+        }
+        else
+        {
+            document.getElementById("item_validate").innerHTML = "";
+        }
 
+        var y = document.forms["myform"]["CategoryID"].value;
+        if (y === "Select Category" || y === 0) {
+            document.getElementById("cat_validate").innerHTML = "Category cannot be blank.";
+            return false;
+        } else {
+            document.getElementById("cat_validate").innerHTML = "";
+        }
 
+        var z = document.forms["myform"]["Quantity"].value;
+        if (isNaN(z))
+        {
+            document.getElementById("qty_validate").innerHTML = "Invalid input.Please enter numbers only.";
+            return false;
+        } else
+            {
+            document.getElementById("qty_validate").innerHTML = "";
+        }
+    }
+    // Clear Add Item fields function
+    function clearData() {
+                document.forms["myform"]["ItemName"].value = "";
+                document.forms["myform"]["Quantity"].value = "";
+                document.forms["myform"]["CategoryID"].value = "Select Category";
+                document.forms["myform"]["StoreID"].value = "Select Store";
+             }
 </script>
 
-
-@*<h4>Add MasterItem</h4>*@
 <hr />
-<form asp-action="Create">
-    <div class="row">
-        <div class="col-md-6">
-            <div class="form-group">
-                <input asp-for="ItemName" class="form-control" placeholder="Enter Item Name" />
-                <span asp-validation-for="ItemName" class="text-danger"></span>
+@*==============Form to Add Item================*@
+<form name="myform" asp-action="Create" onsubmit="return validateForm()">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4 col-md-6 col-xs-6 form-group">
+                <input asp-for="ItemName" placeholder="Enter Item Name" /><br />
+                <span class="text-danger" id="item_validate"></span>
+            </div>
+            <div class="col-lg-3 col-md-6 col-xs-6 form-group">
+                <input asp-for="Quantity" value="" style="width:60px; height:30px" maxlength="4" placeholder="Qty" min="0 " /><br />
+                <span asp-validation-for="Quantity" id="qty_validate" class="text-danger"></span>
+            </div>
+            <div class="col-lg-3 col-md-12 col-xs-12 form-group float-left">
+                <select asp-for="CategoryID" asp-items="ViewBag.CategoryID" onchange="getAisle()" id="catID">
+                    <option>Select Category</option>
+                </select><br />
+                <span asp-validation-for="CategoryID" id="cat_validate" class="text-danger"></span>
             </div>
         </div>
-        <div class="col-xs-3">
-                <div class="form-group" >
-                    <label asp-for="Quantity" class="form-control">Qty</label>
-                </div>
-            </div>
-        <br />
-            <div class="col-xs-3">
-                <div class="form-group">
-                    <input type="text" asp-for="Quantity" class="form-control" size="1" placeholder=""/>
-                    <span asp-validation-for="Quantity"></span>
-                </div>
-            </div>
-        </div>
-     <div class="row">
-        <div class="col-md-6">
-            <div class="form-group">
-                <select asp-for="CategoryID" class="form-control" asp-items="ViewBag.CategoryID" id="catID">
-                    <option value="0">Select Category</option>
-                </select>
-                <span asp-validation-for="CategoryID" class="text-danger"></span>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="form-group">
-                <select asp-for="StoreID" class="form-control" asp-items="ViewBag.StoreID" id="storeID">
-                    <option value="0">Select Store</option>
+        
+        <div class="row">
+            <div class="col-lg-4 col-md-6 col-xs-6 form-group">
+                <select asp-for="StoreID" asp-items="ViewBag.StoreID" onchange="getAisle()" id="storeID">
+                    <option>Select Store</option>
                 </select>
                 <span asp-validation-for="StoreID" class="text-danger"></span>
             </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-6">
-            <div class="form-group">
-                <div class="col-xs-3">
-                    <input asp-for="Aisle.Name" id="aisleName" class="form-control" placeholder="Aisle" />
-                </div>
+            <div class="col-lg-3 col-md-6 col-xs-6 form-group">
+                <input asp-for="Aisle.Name" id="aisleName" placeholder="Aisle" readonly style="width:60px" />
+                <span id="aisle_validate"></span>
             </div>
-        </div>
-        <div class="col-md-6">
-            <div class="form-group" @ViewBag.sl_hidden>
-                <label asp-for="AddToShoppingList" class="control-label"></label>&emsp;&emsp;&emsp;
+            <div class="col-lg-3 col-md-12 col-xs-12" @ViewBag.sl_hidden>
+                <label asp-for="AddToShoppingList" class="form-control-plaintext">Add To Shopping List</label>
                 @if (@ViewBag.pg == "sl")
                 {
                     <input type="checkbox" class="control-label" asp-for="AddToShoppingList" checked />
@@ -91,28 +146,30 @@
                     <input type="checkbox" class="control-label" asp-for="AddToShoppingList" />
                 }
             </div>
-        </div>
-        
-        <div class="form-group" @ViewBag.ml_hidden>
-            <label asp-for="MasterList" class="control-label">Add to Master List</label>
-            @if (@ViewBag.pg == "ml")
-            {
-                <input type="checkbox" asp-for="MasterList" class="control-label" checked  />
-            }
-            else
-            {
-                <input type="checkbox" asp-for="MasterList" class="control-label" />
-            }
-        </div>
-    </div>
 
-    <input asp-for="AisleID" id="aisleID" class="form-control" hidden />
-    <br />
-    <div class="form-group">
-        <input type="submit" value="Save" class="btn btn-sm btn-primary" />&emsp;&emsp;&emsp;&emsp;
-        <button asp-action="Index" class="btn btn-sm btn-primary">Go Back</button>
+            <div class="col-lg-3 col-md-12 col-xs-12 " @ViewBag.ml_hidden>
+                <label asp-for="MasterList" class="form-control-plaintext">Add to Favorite Items</label>
+                @if (@ViewBag.pg == "ml")
+                {
+                    <input type="checkbox" asp-for="MasterList" class="control-label" checked />
+                }
+                else
+                {
+                    <input type="checkbox" asp-for="MasterList" class="control-label" />
+                }
+
+            </div>
+        </div>
+
+        <input asp-for="AisleID" id="aisleID" class="form-control" hidden />
+        <input text value="@ViewBag.pg" name="pg" hidden />
+        <br />
+        <input type="submit" value="Save" class="btn btn-sm btn-primary" />&emsp;&emsp;
+        <a href="https://localhost:44365/MasterItems/Index?pg=sl" class="btn btn-sm btn-primary">Go Back</a>
     </div>
 </form>
+
+
 
 
 
