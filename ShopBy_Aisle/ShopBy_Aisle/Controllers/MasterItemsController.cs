@@ -124,6 +124,7 @@ namespace ShopByAisle.Controllers
                 ViewBag.Results = true;
                 ViewData["pg"] = pg;
                 ViewData["StoreID"] = new SelectList(_context.Stores.Where(s=>s.UserName==CurrentUser), "ID", "Alias", storeId);
+                ViewData["CategoryID"] = new SelectList(_context.Categories, "ID", "Name");
                 ViewData["searchTerm"] = searchTerm;
 
                
@@ -154,7 +155,8 @@ namespace ShopByAisle.Controllers
             }
         }
         
-        // POST: MasterItems/Create
+        // POST: MasterItems/
+
         
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -256,6 +258,7 @@ namespace ShopByAisle.Controllers
             }
             ViewData["CategoryID"] = new SelectList(_context.Categories, "ID", "Name", masterItem.CategoryID);
             ViewData["StoreID"] = new SelectList(_context.Stores.Where(s => s.UserName == CurrentUserID), "ID", "Alias", masterItem.StoreID);
+          
             try
             {
                  Aisle aisle = _context.Aisles.Single(a => a.ID == masterItem.AisleID);
@@ -271,21 +274,18 @@ namespace ShopByAisle.Controllers
         
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, MasterItem masterItem, string pg)
+        public async Task<IActionResult> Edit(int id,MasterItem masterItem, string pg)
         {
             String CurrentUserID = User.Identity.Name;
             masterItem.UserName = CurrentUserID;
-            if (id != masterItem.ID)
-            {
-                return NotFound();
-            }
             Store store = _context.Stores.Single(s => s.ID == masterItem.StoreID);
             Category category = _context.Categories.Single(s => s.ID == masterItem.CategoryID);
             try
             {
-                Aisle aisle = _context.Aisles.Single(a => a.Category == category && a.Store == store);
+                Aisle aisle = _context.Aisles.Single(a => a.Category == category && a.PlaceID == store.PlaceID);
                 masterItem.AisleID = aisle.ID;
                 aisle.Name = masterItem.Aisle.Name;
+                await _context.SaveChangesAsync();
             }
             catch (Exception)
             {
@@ -373,7 +373,6 @@ namespace ShopByAisle.Controllers
                 int_CatID= Convert.ToInt32(jsondata["catID"]);
                 int_StoreID= Convert.ToInt32(jsondata["storeID"]);
                 Store myStore = _context.Stores.Single(s => s.ID == int_StoreID);
-
                 Aisle aisle = _context.Aisles.Single(x => x.CategoryID == int_CatID && x.PlaceID == myStore.PlaceID);
                 return Json(new { success = true, aisleName = aisle.Name, aisleID = aisle.ID });
             }

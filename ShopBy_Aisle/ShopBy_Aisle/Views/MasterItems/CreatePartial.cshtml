@@ -47,11 +47,11 @@
                     if (data.aisleName == "" || data.aisleName == null) {
                         img_tag = "<img src='/Images/help.gif' width='60' height='60'/>";
                         ty_tag = "<img src='/Images/thankyou.gif' width='70' height='70'/>";
-                        document.getElementById("aisle_validate").innerHTML ="Sorry, We do not have an Aisle for this item.If you know please update & "+ img_tag +"other shoppers." ;
+                        document.getElementById("aisle_validate").innerHTML ="Sorry, we do not have an Aisle for this item. If you know please update & "+ img_tag +"other shoppers." ;
                         document.getElementById("aisle_validate").style = "color: brown ;"
                     } else {
                         img_tag = "<img src='/Images/happy.gif' width='60' height='60'/>";
-                        document.getElementById("aisle_validate").innerHTML = img_tag + "Yay! we found the Aisle for you. Enjoy Shopping.";
+                        document.getElementById("aisle_validate").innerHTML = img_tag + "Yay! we found the Aisle for you. Enjoy shopping.";
                         document.getElementById("aisle_validate").style = "color:blue;"
                     }
                 }
@@ -109,19 +109,19 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-4 col-md-6 col-xs-6 form-group">
-                <input asp-for="ItemName" placeholder="Enter Item Name" /><br />
+                <span class="text-danger">*</span><input asp-for="ItemName" placeholder="Enter Item Name" /><br />
                 <span class="text-danger" id="item_validate"></span>
             </div>
             <div class="col-lg-3 col-md-6 col-xs-6 form-group">
-                <input asp-for="Quantity" value="" style="width:60px; height:30px" maxlength="4" placeholder="Qty" min="0 " /><br />
+                <input asp-for="Quantity" value="" style="width:60px; height:30px" maxlength="4" placeholder="Qty" min="0"max="999" /><br />
                 <span asp-validation-for="Quantity" id="qty_validate" class="text-danger"></span>
             </div>
-            <div class="col-lg-3 col-md-12 col-xs-12 form-group float-left">
-                <select asp-for="CategoryID" asp-items="ViewBag.CategoryID" onchange="getAisle()" id="catID">
-                    <option>Select Category</option>
-                </select><br />
-                <span asp-validation-for="CategoryID" id="cat_validate" class="text-danger"></span>
-            </div>
+            <div class="col-lg-4 col-md-12 col-xs-12 form-group float-left">
+                <span class="text-danger">*</span><select asp-for="CategoryID" asp-items="ViewBag.CategoryID" onchange="getAisle()" id="catID">
+                        <option>Select Category</option>
+                    </select><br />
+                    <span asp-validation-for="CategoryID" id="cat_validate" class="text-danger"></span>
+</div>
         </div>
         
         <div class="row">

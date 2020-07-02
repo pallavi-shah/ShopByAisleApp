@@ -15,30 +15,41 @@
     </style>
 </head>
 
-<ul class="navbar-nav nav-tabs" id="navbartext">
-    @if (SignInManager.IsSignedIn(User))
-    {
+<body>
+    <ul class=" nav nav-pills" id="navbartext">
+        @if (SignInManager.IsSignedIn(User))
+        {
+            <li>
+                <a class="nav-link" asp-controller="Home" asp-action="About" style="color: lightyellow">ABOUT</a>
+            </li>
 
-        <li class="nav-item">
-            <a class="nav-link" asp-controller="Home" asp-action="About" style="color: lightyellow">ABOUT</a>
-        </li>
+            <li class="active">
+                <a class="nav-link" asp-controller="MasterItems" asp-action="Index" asp-route-pg="sl" style="color: lightyellow">SHOPPING LIST</a>
+            </li>
 
-        <li class="nav-item">
-            <a class="nav-link" asp-controller="MasterItems" asp-action="Index" asp-route-pg="sl" style="color: lightyellow">SHOPPING LIST</a>
-        </li>
+            <li>
+                <a class="nav-link" asp-controller="MasterItems" asp-action="Index" asp-route-pg="ml" style="color: lightyellow">FAVORITE ITEMS</a>
+            </li>
 
-        <li class="nav-item">
-            <a class="nav-link" asp-controller="MasterItems" asp-action="Index" asp-route-pg="ml" style="color: lightyellow">FAVORITE ITEMS</a>
-        </li>
+            <li>
+                <a class="nav-link" asp-controller="Stores" asp-action="Index" style="color: lightyellow">STORES</a>
+            </li>
 
-        <li class="nav-item">
-            <a class="nav-link" asp-controller="Stores" asp-action="Index" style="color: lightyellow">STORES</a>
-        </li>
+            <li class="nav-item ml-auto">
+                <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                    <button type="submit" class="nav-link btn btn-link" style="font-weight: 600 ; font-size:small ;color: lightyellow ; float:right">LOGOUT</button>
+                </form>
+            </li>
+        }
+    </ul>
 
-        <li class="nav-item ml-auto">
-            <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-                <button type="submit" class="nav-link btn btn-link" style="font-weight: 600 ; font-size:small ;color: lightyellow ; float:right">LOGOUT</button>
-            </form>
-        </li>
-    }
-</ul>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <script>
+        $(".nav li").on("click", function () {
+            $(".nav li").removeClass("active");
+            $("this").addClass("active");
+        });
+    </script>
+</body>
+
